@@ -1,4 +1,4 @@
-import { ABITypeRef, Builder, Slice } from 'ton-core';
+import { ABITypeRef, Address, Builder, Slice } from 'ton-core';
 
 export type PrimitiveSerializer<T, V> = {
 
@@ -148,6 +148,62 @@ const coinsOptSerializer: PrimitiveSerializer<{}, bigint | null> = {
 }
 
 //
+// Bool
+//
+
+const booleanSerializer: PrimitiveSerializer<{}, boolean> = {
+    tsType: `boolean`,
+    load: (src, d) => src.loadBoolean(),
+    store: (builder, d, v) => builder.storeBit(v),
+    match: (src) => {
+        if (src.kind === 'simple' && src.type === 'bool' && !src.optional) {
+            return {};
+        }
+        return null;
+    }
+}
+
+const booleanOptSerializer: PrimitiveSerializer<{}, boolean | null> = {
+    tsType: `boolean | null`,
+    load: (src, d) => src.loadMaybeBoolean(),
+    store: (builder, d, v) => (v !== null) ? builder.storeBit(true).storeBit(v) : builder.storeBit(false),
+    match: (src) => {
+        if (src.kind === 'simple' && src.type === 'bool' && !!src.optional) {
+            return {};
+        }
+        return null;
+    }
+}
+
+//
+// Address
+//
+
+const addressSerializer: PrimitiveSerializer<{}, Address> = {
+    tsType: `Address`,
+    load: (src, d) => src.loadAddress(),
+    store: (builder, d, v) => builder.storeAddress(v),
+    match: (src) => {
+        if (src.kind === 'simple' && src.type === 'address' && !src.optional) {
+            return {};
+        }
+        return null;
+    }
+}
+
+const addressOptSerializer: PrimitiveSerializer<{}, Address | null> = {
+    tsType: `Address| null`,
+    load: (src, d) => src.loadMaybeAddress(),
+    store: (builder, d, v) => builder.storeAddress(v),
+    match: (src) => {
+        if (src.kind === 'simple' && src.type === 'address' && !!src.optional) {
+            return {};
+        }
+        return null;
+    }
+}
+
+//
 // Resolver
 //
 
@@ -157,7 +213,11 @@ const serializers: PrimitiveSerializer<any, any>[] = [
     bigintSerializer,
     bigintOptSerializer,
     coinsSerializer,
-    coinsOptSerializer
+    coinsOptSerializer,
+    addressSerializer,
+    addressOptSerializer,
+    booleanSerializer,
+    booleanOptSerializer
 ];
 
 export function getPrimitiveSerializer(type: ABITypeRef) {
