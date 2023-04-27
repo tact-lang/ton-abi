@@ -1,10 +1,14 @@
 {
   "name": "ton-abi",
-  "version": "1.0.0",
-  "main": "index.js",
+  "version": "0.0.1",
+  "main": "./dist/index.js",
   "repository": "https://github.com/tact-lang/ton-abi.git",
   "author": "Steve Korshakov <steve@korshakov.com>",
   "license": "MIT",
+  "scripts": {
+    "clean": "rm -fr dist",
+    "build": "tsc"
+  },
   "devDependencies": {
     "@types/jest": "^29.5.1",
     "@types/node": "^18.16.1",

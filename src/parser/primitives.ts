@@ -1,5 +1,4 @@
 import { ABITypeRef, Builder, Slice } from 'ton-core';
-import { TypeRegistry } from './types';
 
 export type PrimitiveSerializer<T, V> = {
 
@@ -11,7 +10,7 @@ export type PrimitiveSerializer<T, V> = {
     store: (builder: Builder, d: T, v: V) => void,
 
     // Matcher
-    match: (src: ABITypeRef, registry: TypeRegistry) => T | null
+    match: (src: ABITypeRef) => T | null
 }
 
 //
@@ -22,7 +21,7 @@ const intSerializer: PrimitiveSerializer<{ size: number, signed: boolean }, numb
     tsType: `number`,
     load: (src, d) => d.signed ? src.loadInt(d.size) : src.loadUint(d.size),
     store: (builder, d, v) => d.signed ? builder.storeInt(v, d.size) : builder.storeUint(v, d.size),
-    match: (src, registry) => {
+    match: (src) => {
         if (src.kind === 'simple') {
             if (src.type === 'int' || src.type === 'uint') {
                 let signed = src.type === 'int';
@@ -45,7 +44,7 @@ const intOptSerializer: PrimitiveSerializer<{ size: number, signed: boolean }, n
     tsType: `number | null`,
     load: (src, d) => d.signed ? src.loadMaybeInt(d.size) : src.loadMaybeUint(d.size),
     store: (builder, d, v) => d.signed ? builder.storeMaybeInt(v, d.size) : builder.storeMaybeUint(v, d.size),
-    match: (src, registry) => {
+    match: (src) => {
         if (src.kind === 'simple') {
             if (src.type === 'int' || src.type === 'uint') {
                 let signed = src.type === 'int';
@@ -72,7 +71,7 @@ const bigintSerializer: PrimitiveSerializer<{ size: number, signed: boolean }, b
     tsType: `bigint`,
     load: (src, d) => d.signed ? src.loadIntBig(d.size) : src.loadUintBig(d.size),
     store: (builder, d, v) => d.signed ? builder.storeInt(v, d.size) : builder.storeUint(v, d.size),
-    match: (src, registry) => {
+    match: (src) => {
         if (src.kind === 'simple') {
             if (src.type === 'int' || src.type === 'uint') {
                 let signed = src.type === 'int';
@@ -95,7 +94,7 @@ const bigintOptSerializer: PrimitiveSerializer<{ size: number, signed: boolean }
     tsType: `bigint | null`,
     load: (src, d) => d.signed ? src.loadMaybeIntBig(d.size) : src.loadMaybeUintBig(d.size),
     store: (builder, d, v) => d.signed ? builder.storeMaybeInt(v, d.size) : builder.storeMaybeUint(v, d.size),
-    match: (src, registry) => {
+    match: (src) => {
         if (src.kind === 'simple') {
             if (src.type === 'int' || src.type === 'uint') {
                 let signed = src.type === 'int';
@@ -161,9 +160,9 @@ const serializers: PrimitiveSerializer<any, any>[] = [
     coinsOptSerializer
 ];
 
-export function getPrimitiveSerializer(type: ABITypeRef, registry: TypeRegistry) {
+export function getPrimitiveSerializer(type: ABITypeRef) {
     for (let s of serializers) {
-        let matched = s.match(type, registry);
+        let matched = s.match(type);
         if (matched !== null) {
             return { serializer: s, type: matched };
         }

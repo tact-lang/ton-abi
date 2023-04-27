@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`types should measure and parse types 1`] = `
+{
+  "$$type": "Deploy",
+  "queryId": 0n,
+}
+`;

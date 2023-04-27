@@ -1,8 +1,8 @@
-import { ABIType } from "ton-core";
+import { ABIType, beginCell } from "ton-core";
 import { TypeRegistry } from "./types";
 
 describe('types', () => {
-    it('should allocate types', () => {
+    it('should measure and parse types', () => {
         const types: ABIType[] = [{
             "name": "Deploy",
             "header": 2490013878,
@@ -50,5 +50,8 @@ describe('types', () => {
         size = registry.size('FactoryDeploy');
         expect(size.bits).toBe(32 + 64 + 267);
         expect(size.refs).toBe(0);
+
+        let parsed = registry.parse(beginCell().storeUint(2490013878, 32).storeUint(0, 64).endCell().beginParse());
+        expect(parsed).toMatchSnapshot();
     });
 });

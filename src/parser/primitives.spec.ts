@@ -1,6 +1,5 @@
 import { ABITypeRef, beginCell } from "ton-core";
 import { getPrimitiveSerializer } from "./primitives";
-import { TypeRegistry } from "./types";
 
 describe('primitives', () => {
     it('should parse integer values', () => {
@@ -11,7 +10,7 @@ describe('primitives', () => {
                 type: 'uint',
                 format: i
             };
-            let ser = getPrimitiveSerializer(type, new TypeRegistry())!;
+            let ser = getPrimitiveSerializer(type)!;
             let v = ser.serializer.load(sc, ser.type);
             if (i <= 32) {
                 expect(ser.serializer.tsType).toBe('number');
@@ -33,7 +32,7 @@ describe('primitives', () => {
                 type: 'int',
                 format: i
             };
-            let ser = getPrimitiveSerializer(type, new TypeRegistry())!;
+            let ser = getPrimitiveSerializer(type)!;
             let v = ser.serializer.load(sc, ser.type);
             if (i <= 32) {
                 expect(ser.serializer.tsType).toBe('number');
