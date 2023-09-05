@@ -1,4 +1,4 @@
-import { ABIType, ABITypeRef, Slice } from "ton-core";
+import { ABIType, ABITypeRef, Slice } from "@ton/core";
 import { getPrimitiveSerializer } from "./primitives";
 
 const ALLOCATOR_RESERVE_BIT = 1;

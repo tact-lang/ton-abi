@@ -1,4 +1,4 @@
-import { ABITypeRef, Address, Builder, Slice } from 'ton-core';
+import { ABITypeRef, Address, Builder, Slice } from '@ton/core';
 
 export type PrimitiveSerializer<T, V> = {
 
