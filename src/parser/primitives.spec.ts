@@ -1,4 +1,4 @@
-import { ABITypeRef, beginCell } from "ton-core";
+import { ABITypeRef, beginCell } from "@ton/core";
 import { getPrimitiveSerializer } from "./primitives";
 
 describe('primitives', () => {

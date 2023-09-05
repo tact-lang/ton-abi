@@ -1,4 +1,4 @@
-import { ABIType, beginCell } from "ton-core";
+import { ABIType, beginCell } from "@ton/core";
 import { TypeRegistry } from "./types";
 
 describe('types', () => {
